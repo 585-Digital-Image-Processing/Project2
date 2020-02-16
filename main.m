@@ -1,4 +1,4 @@
-%%%%%%%%%%%%% main.m file %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% main.m file %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purpose:  
 %      Realize Hit-or-miss 
 %
@@ -53,8 +53,8 @@
 %  Date:        1/30/2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% First part
-% Step1: Load the images
+%% Homotopic Skeletonization
+% Step1: Load the images and convert them to binary images
 bear=imread('bear.gif');
 bear=imbinarize(bear);
 figure()
@@ -67,12 +67,17 @@ figure()
 imshow(penn256);
 title('Binary image');
 
+% Construct 8 pairs of structural elements with function structure_E
 [Bfs,Bbs] = structure_E();
 
+% Compute the skeleton of input images
 skeleton_bear = skeletonize(bear, Bfs, Bbs);
 
+
+% Show X_2, X_5, X_11, and the final skeletonized image
 % show bear
 to_be_shown_bear = [3, 6, 11, length(skeleton_bear)];
+
 figure();
 for i = 1:length(to_be_shown_bear)
     bear_g=bear.*255;
@@ -96,6 +101,7 @@ for i = 1:length(to_be_shown_bear)
     caption = sprintf('X_{%d}', to_be_shown_bear(i)-1);
     title(caption);
 end
+
 
 skeleton_penn = skeletonize(penn256, Bfs, Bbs);
 
@@ -124,4 +130,31 @@ for i = 1:length(to_be_shown_penn)
     caption = sprintf('X_{%d}', to_be_shown_penn(i)-1);
     title(caption);
 end
+
+
+%% Shape Analysis
+
+% Step1: Load the images and convert them to binary images
+match1=imread('match1.gif');
+match1=imbinarize(match1);
+figure()
+imshow(match1);
+title('Binary image');
+
+% Isolate distinct objects and find the minimum bounding box enclosing each
+% distinct object
+CC = bwconncomp(match1);
+numOfPixels = cellfun(@numel,CC.PixelIdxList);
+match1_obs = regionprops(CC,'image');
+% Bounding box four values: [left, top, width, height]
+Bounding_box = match_obs.BoundingBox;
+
+% Construct the structuring element
+B = [1 1 1; 1 1 1; 1 1 1];
+
+% Compute the size distribution
+
+% Compute Pectrum
+
+% Compute complexity 
 
