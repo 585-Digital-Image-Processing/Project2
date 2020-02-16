@@ -4,7 +4,7 @@ function a = Complexity(f)
     a = 0;
     for i = 1:r
         if(f(i) ~= 0)
-            a = a + f(1)*log(f(i));
+            a = a - f(i)*log(f(i));
         end
     end   
 end

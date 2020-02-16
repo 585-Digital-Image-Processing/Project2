@@ -57,7 +57,11 @@ for i = rlow:rhigh
         % if yes (i.e. there exists 1 in the region), newimg(i,j)=1
         % otherwise, newimg(i,j)=0
         val=sum(temp(:));
-        newimg(i,j) = val;
+        if val>0
+            newimg(i,j) = 1;
+        else
+            newimg(i,j) = 0;
+        end
     end
 end
 

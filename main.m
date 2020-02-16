@@ -142,7 +142,7 @@ title('Binary image');
 % Isolate distinct objects and find the minimum bounding box enclosing each
 % distinct object
 CC = bwconncomp(match1);
-numOfPixels = cellfun(@numel,CC.PixelIdxList);
+% numOfPixels = cellfun(@numel,CC.PixelIdxList);
 
 % Show the isolated images
 match1_imgs = regionprops(CC, 'image');
@@ -159,17 +159,17 @@ match1_obs.BoundingBox
 
 % Compute the size distribution
 for i = 1:4
-    size_distribution{i} = SizeDistribution(match1_imgs(i).Image);
+    [size_distribution{i},r] = sizeDistribution(match1_imgs(i).Image);
 end
 
 % Compute Pectrum
 for i = 1:4
-    Pec{i} = Pectrum(match1_imgs(i).Image, size_distribution(i));
+    Pec{i} = Pectrum(match1_imgs(i).Image, cell2mat(size_distribution(i)));
 end
 % Compute complexity
 complexity = zeros(1,4);
 for i = 1:4
-    complexity(i) = Complexity(Pec(i));
+    complexity(i) = Complexity(cell2mat(Pec(i)));
 end
 
 % Distance
