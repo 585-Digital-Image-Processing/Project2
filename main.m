@@ -50,22 +50,30 @@
 %      bitand_s.m           Perform bitand operation of two matrices
 %
 %  Author:      Yanxi Yang, Jiuchao Yin, Hongjie Liu
-%  Date:        2/16/2020
+%  Date:        1/30/2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 %% First part
-% Step1: Load the images and transform the image into a binary image
-
+% Step1: Load the images
 bear=imread('bear.gif');
 bear=imbinarize(bear);
 figure()
 imshow(bear);
 title('Binary image');
 
-
 penn256 = imread('penn256.gif');
 penn256 = imbinarize(penn256);
 figure()
 imshow(penn256);
 title('Binary image');
+
+[Bfs,Bbs] = structure_E();
+
+skeleton_bear = skeletonize(bear, Bfs, Bbs);
+%
+%to_be_shown = [3, 6, 11, length(skeleton_bear)];
+%for i = 1:length(to_be_shown)
+   % subplot(2,2,i);
+   % figure();
+    %imshow(skeleton_bear(to_be_shown(i)));
+%end
