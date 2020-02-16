@@ -9,11 +9,13 @@ i = 1;
 X_0 = ori_img;
 set{i} = X_0;
 i = i+1;
+temp_X = X_0;
 for j=1:8
-    temp_X = thin(X_0, ele_f{j}, ele_b{j});
+    
+    temp_X = thin(temp_X, ele_f{j}, ele_b{j});
 end
 set{i} = temp_X;
-while set{i}~=set{i-1}
+while ~isequal(set{i},set{i-1})
     i = i+1;
     temp_X = set{i-1};
     for j=1:8

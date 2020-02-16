@@ -5,22 +5,24 @@
 %      
 % Input Variables:
 %      X       MxN input 2D binary image 
-%      Bf      3x3 input 2D binary image
+%      Bf      3x3 input 2D binary image, foreground structural element
+%      Bb      3x3 input 2D binary image, background structural element
 %      
 % Returned Results:
-%      C       result after bit-and operation of A and B
+%      A       result of hit or miss
 %
 % Processing Flow:
-%      1. Loop through every element in A and B. Check whether elements at
-%      the same position (x,y) in A and B are the same.
-%           If yes, then in the result image C, C(x,y) = A(x,y)
-%           Otherwise, C(x,y) = 0
+%      1. Compute minkowski set subtraction of X by Bf
+%      2. Compute minkowski set subtraction of X^c by Bb
+%      3. Compute the intersection of the two results above, which will be
+%      the result A
 %
 %  Restrictions/Notes:
-%      The two input image should be of the same dimension 
+%      All the images are binary.
 %
 %  The following functions are called:
-%      none
+%      erosion.m
+%      bitand_s.m
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
