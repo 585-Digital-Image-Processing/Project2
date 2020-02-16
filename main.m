@@ -54,10 +54,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%% First part
 % Step1: Load the images and transform the image into a binary image
 
 bear=imread('bear.gif');
 bear=imbinarize(bear);
 figure()
 imshow(bear);
+title('Binary image');
+
+penn256 = imread('penn256.gif');
+penn256 = imbinarize(penn256);
+figure()
+imshow(penn256);
 title('Binary image');
