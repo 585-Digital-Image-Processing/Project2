@@ -70,10 +70,10 @@ title('Binary image');
 [Bfs,Bbs] = structure_E();
 
 skeleton_bear = skeletonize(bear, Bfs, Bbs);
-%
-%to_be_shown = [3, 6, 11, length(skeleton_bear)];
-%for i = 1:length(to_be_shown)
-   % subplot(2,2,i);
-   % figure();
-    %imshow(skeleton_bear(to_be_shown(i)));
-%end
+
+to_be_shown = [3, 6, 11, length(skeleton_bear)];
+% for i = 1:length(to_be_shown)
+%    subplot(2,2,i);
+%    figure();
+%     imshow(skeleton_bear(to_be_shown(i)));
+% end
