@@ -50,7 +50,7 @@
 %      bitand_s.m           Perform bitand operation of two matrices
 %
 %  Author:      Yanxi Yang, Jiuchao Yin, Hongjie Liu
-%  Date:        1/30/2020
+%  Date:        2/16/2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -61,3 +61,5 @@ bear=imbinarize(bear);
 figure()
 imshow(bear);
 title('Binary image');
+
+
