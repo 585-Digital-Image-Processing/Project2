@@ -14,7 +14,7 @@ while u(m)~= 0
     %m= m+1;
     B1 =ones (3+2*(m-1));
     X = erosion(X, B1); 
-    X = dilation(X, B1);
+    X = dilation_s(X, B1);
     if sum(X(:))==0
         break;
     end
