@@ -1,4 +1,4 @@
-function SE = Structure_E(B_f, B_b)
+function [B_f, B_b] = Structure_E()
 B_f={};
 B_f{1} = [0 0 0; 0 1 0; 1 1 1];
 B_f{2}= [0 0 0 ;1 1 0; 1 1 0];
