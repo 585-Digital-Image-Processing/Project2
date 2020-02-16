@@ -53,11 +53,16 @@
 %  Date:        1/30/2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+%% First part
 % Step1: Load the images
-
 bear=imread('bear.gif');
 bear=imbinarize(bear);
 figure()
 imshow(bear);
+title('Binary image');
+
+penn256 = imread('penn256.gif');
+penn256 = imbinarize(penn256);
+figure()
+imshow(penn256);
 title('Binary image');
