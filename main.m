@@ -72,13 +72,13 @@ title('Binary image');
 skeleton_bear = skeletonize(bear, Bfs, Bbs);
 
 to_be_shown = [3, 6, 11, length(skeleton_bear)];
-<<<<<<< HEAD
+%<<<<<<< HEAD
 % for i = 1:length(to_be_shown)
 %    subplot(2,2,i);
 %    figure();
 %     imshow(skeleton_bear(to_be_shown(i)));
 % end
-=======
+
 figure();
 for i = 1:length(to_be_shown)
     subplot(2,2,i);
@@ -86,4 +86,3 @@ for i = 1:length(to_be_shown)
     caption = sprintf('X_{%d}', to_be_shown(i)-1);
     title(caption);
 end
->>>>>>> acf3ab8943329be9def9ed547b2b4911d12cfe51
