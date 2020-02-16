@@ -74,21 +74,7 @@ title('Binary image');
 skeleton_bear = skeletonize(bear, Bfs, Bbs);
 
 
-% Show X_2, X_5, X_11, and the final skeletonized image
-to_be_shown = [3, 6, 11, length(skeleton_bear)];
-
-
-to_be_shown = [3, 6, 11, length(skeleton_bear)];
-%<<<<<<< HEAD
-% for i = 1:length(to_be_shown)
-%    subplot(2,2,i);
-%    figure();
-%     imshow(skeleton_bear(to_be_shown(i)));
-% end
-
-
-
-% Show X_2, X_5, X_11, and the final skeletonized image
+% Show X_2, X_5, X_10, and the final skeletonized image
 % show bear
 to_be_shown_bear = [3, 6, 11, length(skeleton_bear)];
 
@@ -123,10 +109,26 @@ skeleton_penn = skeletonize(penn256, Bfs, Bbs);
 to_be_shown_penn = [3, 6, length(skeleton_penn)];
 
 figure();
-for i = 1:length(to_be_shown)
+for i = 1:length(to_be_shown_penn)
+    penn256_g=penn256.*255;
+    [M, N]=size(penn256_g);
+    rgb_penn256 = zeros(M,N,3);
+    rgb_penn256(:,:,1)=penn256_g;
+    rgb_penn256(:,:,2)=penn256_g;
+    rgb_penn256(:,:,3)=penn256_g;
     subplot(2,2,i);
-    imshow(skeleton_bear{to_be_shown(i)});
-    caption = sprintf('X_{%d}', to_be_shown(i)-1);
+    result=skeleton_penn{to_be_shown_penn(i)};
+    for m=1:M
+        for n=1:N
+            if result(m,n)==1
+                rgb_penn256(m,n,1)=255;
+                rgb_penn256(m,n,2)=0;
+                rgb_penn256(m,n,3)=0;
+            end
+        end
+    end
+    imshow(rgb_penn256);
+    caption = sprintf('X_{%d}', to_be_shown_penn(i)-1);
     title(caption);
 end
 
@@ -142,7 +144,7 @@ title('Binary image');
 % Isolate distinct objects and find the minimum bounding box enclosing each
 % distinct object
 CC = bwconncomp(match1);
-numOfPixels = cellfun(@numel,CC.PixelIdxList);
+% numOfPixels = cellfun(@numel,CC.PixelIdxList);
 
 % Show the isolated images
 match1_imgs = regionprops(CC, 'image');
@@ -159,17 +161,17 @@ match1_obs.BoundingBox
 
 % Compute the size distribution
 for i = 1:4
-    size_distribution{i} = SizeDistribution(match1_imgs(i).Image);
+    [size_distribution{i},r] = sizeDistribution(match1_imgs(i).Image);
 end
 
 % Compute Pectrum
 for i = 1:4
-    Pec{i} = Pectrum(match1_imgs(i).Image, size_distribution(i));
+    Pec{i} = Pectrum(match1_imgs(i).Image, cell2mat(size_distribution(i)));
 end
 % Compute complexity
 complexity = zeros(1,4);
 for i = 1:4
-    complexity(i) = Complexity(Pec(i));
+    complexity(i) = Complexity(cell2mat(Pec(i)));
 end
 
 % Distance
