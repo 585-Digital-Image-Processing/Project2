@@ -1,4 +1,4 @@
-%%%%%%%%%%%%% main.m file %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%% main.m file %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Purpose:  
 %      Realize Hit-or-miss 
 %
@@ -53,8 +53,8 @@
 %  Date:        1/30/2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% First part
-% Step1: Load the images
+%% Homotopic Skeletonization
+% Step1: Load the images and convert them to binary images
 bear=imread('bear.gif');
 bear=imbinarize(bear);
 figure()
@@ -67,10 +67,13 @@ figure()
 imshow(penn256);
 title('Binary image');
 
+% Construct 8 pairs of structural elements with function structure_E
 [Bfs,Bbs] = structure_E();
 
+% Compute the skeleton of input images
 skeleton_bear = skeletonize(bear, Bfs, Bbs);
 
+<<<<<<< HEAD
 to_be_shown = [3, 6, 11, length(skeleton_bear)];
 %<<<<<<< HEAD
 % for i = 1:length(to_be_shown)
@@ -79,10 +82,90 @@ to_be_shown = [3, 6, 11, length(skeleton_bear)];
 %     imshow(skeleton_bear(to_be_shown(i)));
 % end
 
+=======
+
+% Show X_2, X_5, X_11, and the final skeletonized image
+% show bear
+to_be_shown_bear = [3, 6, 11, length(skeleton_bear)];
+
 figure();
-for i = 1:length(to_be_shown)
+for i = 1:length(to_be_shown_bear)
+    bear_g=bear.*255;
+    [M, N]=size(bear_g);
+    rgb_bear = zeros(M,N,3);
+    rgb_bear(:,:,1)=bear_g;
+    rgb_bear(:,:,2)=bear_g;
+    rgb_bear(:,:,3)=bear_g;
     subplot(2,2,i);
-    imshow(skeleton_bear{to_be_shown(i)});
-    caption = sprintf('X_{%d}', to_be_shown(i)-1);
+    result=skeleton_bear{to_be_shown_bear(i)};
+    for m=1:M
+        for n=1:N
+            if result(m,n)==1
+                rgb_bear(m,n,1)=255;
+                rgb_bear(m,n,2)=0;
+                rgb_bear(m,n,3)=0;
+            end
+        end
+    end
+    imshow(rgb_bear);
+    caption = sprintf('X_{%d}', to_be_shown_bear(i)-1);
     title(caption);
 end
+
+
+skeleton_penn = skeletonize(penn256, Bfs, Bbs);
+
+% show penn256
+to_be_shown_penn = [3, 6, length(skeleton_penn)];
+>>>>>>> cb4c5efef8b0395b3697ad59458f38abb85693ed
+figure();
+for i = 1:length(to_be_shown_penn)
+    penn256_g=penn256.*255;
+    [M, N]=size(penn256_g);
+    rgb_penn256 = zeros(M,N,3);
+    rgb_penn256(:,:,1)=penn256_g;
+    rgb_penn256(:,:,2)=penn256_g;
+    rgb_penn256(:,:,3)=penn256_g;
+    subplot(2,2,i);
+    result=skeleton_penn{to_be_shown_penn(i)};
+    for m=1:M
+        for n=1:N
+            if result(m,n)==1
+                rgb_penn256(m,n,1)=255;
+                rgb_penn256(m,n,2)=0;
+                rgb_penn256(m,n,3)=0;
+            end
+        end
+    end
+    imshow(rgb_penn256);
+    caption = sprintf('X_{%d}', to_be_shown_penn(i)-1);
+    title(caption);
+end
+
+
+%% Shape Analysis
+
+% Step1: Load the images and convert them to binary images
+match1=imread('match1.gif');
+match1=imbinarize(match1);
+figure()
+imshow(match1);
+title('Binary image');
+
+% Isolate distinct objects and find the minimum bounding box enclosing each
+% distinct object
+CC = bwconncomp(match1);
+numOfPixels = cellfun(@numel,CC.PixelIdxList);
+match1_obs = regionprops(CC,'image');
+% Bounding box four values: [left, top, width, height]
+Bounding_box = match_obs.BoundingBox;
+
+% Construct the structuring element
+B = [1 1 1; 1 1 1; 1 1 1];
+
+% Compute the size distribution
+
+% Compute Pectrum
+
+% Compute complexity 
+
