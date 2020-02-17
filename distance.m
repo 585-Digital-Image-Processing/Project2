@@ -1,10 +1,9 @@
 function dist = distance(f1, f2)
 % input f1 is the pecstrum of test object (a vector)
 % input f2 is the pecstrum of a reference object R_i (a vector)
-
+% input w is the value of weight i.e. c_n
 % first, make the length of f1 equal to that of f2
-f1 = [1,2];
-f2 = [1,2,3];
+
 l1 = length(f1);
 l2 = length(f2);
 if l1 > l2
@@ -18,6 +17,9 @@ end
 dist = 0;
 for i = 1:length(f1)
     temp = (f1(i)-f2(i))^2;
+    if i>=3 && i<=6
+        temp = temp*50;
+    end
     dist = dist + temp;
 end
 dist = sqrt(dist);
