@@ -152,6 +152,8 @@ figure();
 for i = 1:4
     subplot(2,2,i)
     imshow(match1_imgs(i).Image);
+    caption = sprintf('%d', i);
+    title(caption);
 end
 % Bounding box four values: [left, top, width, height]
 match1_obs = regionprops(CC);
@@ -175,3 +177,168 @@ for i = 1:4
 end
 
 % Distance
+% Step1: Load the images and convert them to binary images
+match3=imread('match3.gif');
+match3=imbinarize(match3);
+figure()
+imshow(match3);
+title('Binary image');
+
+% Isolate distinct objects and find the minimum bounding box enclosing each
+% distinct object
+CC = bwconncomp(match3);
+% numOfPixels = cellfun(@numel,CC.PixelIdxList);
+
+% Show the isolated images
+match3_imgs = regionprops(CC, 'image');
+figure();
+for i = 1:4
+    subplot(2,2,i)
+    imshow(match3_imgs(i).Image);
+end
+% Bounding box four values: [left, top, width, height]
+match3_obs = regionprops(CC);
+match3_obs.BoundingBox
+
+% Compute the size distribution of match3
+for i = 1:4
+    [size_distribution3{i},r] = sizeDistribution(match3_imgs(i).Image);
+end
+
+% Compute Pectrum
+for i = 1:4
+    Pec3{i} = Pectrum(match3_imgs(i).Image, cell2mat(size_distribution3(i)));
+end
+% Compute complexity
+complexity = zeros(1,4);
+for i = 1:4
+    complexity3(i) = Complexity(cell2mat(Pec3(i)));
+end
+
+% Compute distance
+for i = 1:4
+    for j=1:4
+        dist(i,j)=distance(cell2mat(Pec3(i)),cell2mat(Pec(j)));
+    end
+end
+
+for i=1:4
+    [min_dis, obj_num] = min(dist(i,:));
+    most_similar(i) = obj_num;
+end
+
+for i = 1:4
+    subplot(2,2,i)
+    imshow(match3_imgs(i).Image);
+    caption = sprintf('most similar:%d', most_similar(i));
+    title(caption);
+end
+
+
+%% part(b)
+
+img_num = 4;
+show_column = 2;
+
+% Step1: Load the images and convert them to binary images
+shadow1=imread('shadow1.gif');
+shadow1=imbinarize(shadow1);
+shadow1 = shadow1(78:256,:);
+%shadow1_skeleton = shadow1(1:77,:);
+figure()
+imshow(shadow1);
+title('Binary image-shadow1');
+
+% Isolate distinct objects and find the minimum bounding box enclosing each
+% distinct object
+CC = bwconncomp(shadow1);
+% numOfPixels = cellfun(@numel,CC.PixelIdxList);
+
+% Show the isolated images
+shadow1_imgs = regionprops(CC, 'image');
+figure();
+for i = 1:img_num
+    subplot(show_column,show_column,i)
+    imshow(shadow1_imgs(i).Image);
+    caption = sprintf('%d', i);
+    title(caption);
+end
+% Bounding box four values: [left, top, width, height]
+shadow1_obs = regionprops(CC);
+shadow1_obs.BoundingBox
+
+
+
+% Compute the size distribution
+for i = 1:img_num
+    [size_distribution{i},r] = sizeDistribution(shadow1_imgs(i).Image);
+end
+
+% Compute Pectrum
+for i = 1:img_num
+    Pec{i} = Pectrum(shadow1_imgs(i).Image, cell2mat(size_distribution(i)));
+end
+% Compute complexity
+complexity = zeros(1,img_num);
+for i = 1:img_num
+    complexity(i) = Complexity(cell2mat(Pec(i)));
+end
+
+% Distance
+% Step1: Load the images and convert them to binary images
+shadow1rotated=imread('shadow1rotated.gif');
+shadow1rotated=imbinarize(shadow1rotated);
+shadow1rotated = shadow1rotated(78:256,:);
+figure()
+imshow(shadow1rotated);
+title('Binary image-shadow1rotated');
+
+% Isolate distinct objects and find the minimum bounding box enclosing each
+% distinct object
+CC = bwconncomp(shadow1rotated);
+% numOfPixels = cellfun(@numel,CC.PixelIdxList);
+
+% Show the isolated images
+shadow1rotated_imgs = regionprops(CC, 'image');
+figure();
+for i = 1:img_num
+    subplot(show_column,show_column,i)
+    imshow(shadow1rotated_imgs(i).Image);
+end
+% Bounding box four values: [left, top, width, height]
+shadow1rotated_obs = regionprops(CC);
+shadow1rotated_obs.BoundingBox
+
+% Compute the size distribution of match3
+for i = 1:img_num
+    [size_distribution3{i},r] = sizeDistribution(shadow1rotated_imgs(i).Image);
+end
+
+% Compute Pectrum
+for i = 1:img_num
+    Pec3{i} = Pectrum(shadow1rotated_imgs(i).Image, cell2mat(size_distribution3(i)));
+end
+% Compute complexity
+complexity = zeros(1,img_num);
+for i = 1:img_num
+    complexity3(i) = Complexity(cell2mat(Pec3(i)));
+end
+
+% Compute distance
+for i = 1:img_num
+    for j=1:img_num
+        dist(i,j)=distance_cartoon(cell2mat(Pec3(i)),cell2mat(Pec(j)));
+    end
+end
+
+for i=1:img_num
+    [min_dis, obj_num] = min(dist(i,:));
+    most_similar(i) = obj_num;
+end
+
+for i = 1:img_num
+    subplot(show_column,show_column,i)
+    imshow(shadow1rotated_imgs(i).Image);
+    caption = sprintf('most similar:%d', most_similar(i));
+    title(caption);
+end
