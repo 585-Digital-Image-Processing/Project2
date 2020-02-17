@@ -164,7 +164,7 @@ end
 
 % Compute Pectrum
 for i = 1:4
-    Pec3{i} = Pectrum(match3_imgs(i).Image, cell2mat(size_distribution3(i)));
+    Pec3{i} = Pectrum(cell2mat(size_distribution3(i)));
 end
 % Compute complexity
 complexity = zeros(1,4);
@@ -233,7 +233,7 @@ end
 
 % Compute Pectrum
 for i = 1:img_num
-    Pec{i} = Pectrum(shadow1_imgs(i).Image, cell2mat(size_distribution(i)));
+    Pec{i} = Pectrum(cell2mat(size_distribution(i)));
 end
 % Compute complexity
 complexity = zeros(1,img_num);
@@ -273,7 +273,7 @@ end
 
 % Compute Pectrum
 for i = 1:img_num
-    Pec3{i} = Pectrum(shadow1rotated_imgs(i).Image, cell2mat(size_distribution3(i)));
+    Pec3{i} = Pectrum(cell2mat(size_distribution3(i)));
 end
 % Compute complexity
 complexity = zeros(1,img_num);
