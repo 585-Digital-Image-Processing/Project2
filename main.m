@@ -1,56 +1,71 @@
 %%%%%%%%%%%%%%%%% main.m file %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % Purpose:  
-%      Realize Hit-or-miss 
+%      Impelement homotopic skeletonization, shape analysis, and pattern 
+%      recognition 
 %
 % Input Variables:
-%      f            input 2D 8-bit image
+%      bear.gif         input 2D image for homotopic skeletonization analysis
+%      penn256.gif      input 2D image for homotopic skeletonization analysis
+%      match1.gif       input 2D image for shape analysis and pattern
+%                       recognition
+%      match3.gif       input 2D image for shape analysis and pattern
+%                       recognition
+%      shadow1.gif      input 2D image for shape analysis and pattern
+%                       recognition
+%      shaodow1rotaed.gif   input 2D image for shape analysis and pattern
+%                       recognition
 %    
 % Returned Results:
-%      B            A binary image of f
-%      new_B        Image B after noise removal
-%      min_r        Radius of the smallest circles
-%      max_r        Radius of the biggest circles
-%      smallest     An image indicating locations of smallest circles in B
-%      biggest      An image indicating locations of biggest circles in B
+%      skeleton_bear    Skeleton of bear.gif
+%      rgb_bear         Skeleton of bear.gif on top of the original image
+%      skeleton_penn    Skeleton of penn256.gif
+%      rgb_penn256      Skeleton of penn256.gif on top of the original image
+%      {}_imgs          isolated objects of in match1, match3, shadow1,
+%                       shadow1rotated
+%      {}_obs           isolated objects with bounding box information of 
+%                       match1, match3, shadow1,shadow1rotated.
+%      size_distribution Size distribution of isolated objects
+%      Pec              Pecstrum of isolated objects  
+%      complexity       Complexity of isolated objects
+%      dist             Distance of each test object with each reference
+%                       object
 %
 % Processing Flow:
-%      1. Load, extract the gray layer, and display the input image
-%      2. Convert the input image into binary image
-%      3. use opening and closing to remove noise at the background and
-%         inside circles
-%      4. Find all circles in the image and get their centers and radius,
-%         especially the radius of the smallest and biggest circles: 
-%         min_r and max_r.
-%      5. Find the locations of smallest circles:
-%         - Erode the binary image with a structure element: a circle with 
-%           radius (min_r) - 1.
-%         - Erode the complement of the image with a structure element: a
-%           square having a round cavity with radius (min_r) + 1. 
-%         - Perform bitand of the two resulted matrices
-%         - The circles with radius in range [(min_r) - 1, (min_r) + 1] will 
-%           be located.
-%      6. Find the locations of biggest circles:
-%         - Erode the binary image with a structure element: a circle with 
-%           radius (max_r) - 1.
-%         - Erode the complement of the image with a structure element: a
-%           square having a round cavity with radius (max_r) + 1. 
-%         - Perform bitand of the two resulted matrices
-%         - The circles with radius in range [(max_r) - 1, (max_r) + 1] will 
-%           be located.
-%          
+%      1. Homotopic Skeletonization:
+%         1.1 Load, and onvert the input image into binary image.
+%         1.2 Build the structuring element set as given, with foreground 
+%             and background as each pairs of structuring element set.
+%         1.3 Perfom thinning of input image with the 8 pair of structuring
+%         elements iteratively until we get the skeleton results.
+%         1.4 Show the superposition plotting with intermediate results 
+%             as well as the final skeleton result.
+%      2. Shape Analysis and pattern recognition
+%         2.1 Compute shape distribution, pecstrum, and complexity.
+%         2.2 Determine which object is most complex based on complexity.
+%         2.3 Compute shap distribution and pecstrum of test objects as
+%         well.
+%         2.4 Calculate the dist of all test objects with each reference
+%         object.
+%         2.5 The reference object with the smallest distance is considered
+%         to be the one resemsble the test object.         
 %
 %  Restrictions/Notes:
-%      This function requires an 8-bit image as input.  
+%      N/A
 %
 %  The following functions are called:
-%      bilImageConv.m       Convert an 8-bit image to a binary image
-%      opening.m            Remove the noise outside circles
-%      closing.m            Fill the noise in the circles
-%      erosion.m            Erode an image with a structure element
-%      bitand_s.m           Perform bitand operation of two matrices
+%      structure_E.m            Construct the 8 pair of structural elements  
+%      skeletonize.m            Compute the skeleton of the input image
+%      sizeDistribution.m       Compute the size distribution of input images 
+%      Pecstrum.m               Compute the Pecstrum of the input image
+%      Complexity.m             Compute the complexity of the input image
+%      distance.m               Compute the distance of the two input
+%                               objects
+%      distance_cartoon.m       Compute the distance of the two input
+%                               objects
 %
 %  Author:      Yanxi Yang, Jiuchao Yin, Hongjie Liu
-%  Date:        1/30/2020
+%  Date:        2/17/2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Homotopic Skeletonization
@@ -155,15 +170,15 @@ end
 match1_obs = regionprops(CC);
 match1_obs.BoundingBox
 
-% Step 3: compute size distribution, pectrum, and complexity
+% Step 3: compute size distribution, Pecstrum, and complexity
 % Compute the size distribution
 for i = 1:4
     size_distribution{i} = sizeDistribution(match1_imgs(i).Image);
 end
 
-% Compute Pectrum
+% Compute Pecstrum
 for i = 1:4
-    Pec{i} = Pectrum(size_distribution{i});
+    Pec{i} = Pecstrum(size_distribution{i});
 end
 % Compute complexity 
 complexity = zeros(1,4);
@@ -207,9 +222,9 @@ for i = 1:4
     [size_distribution3{i},r] = sizeDistribution(match3_imgs(i).Image);
 end
 
-% Compute Pectrum
+% Compute Pecstrum
 for i = 1:4
-    Pec3{i} = Pectrum(cell2mat(size_distribution3(i)));
+    Pec3{i} = Pecstrum(cell2mat(size_distribution3(i)));
 end
 % Compute complexity
 complexity = zeros(1,4);
@@ -276,9 +291,9 @@ for i = 1:img_num
     [size_distribution{i},r] = sizeDistribution(shadow1_imgs(i).Image);
 end
 
-% Compute Pectrum
+% Compute Pecstrum
 for i = 1:img_num
-    Pec{i} = Pectrum(cell2mat(size_distribution(i)));
+    Pec{i} = Pecstrum(cell2mat(size_distribution(i)));
 end
 % Compute complexity
 complexity = zeros(1,img_num);
@@ -316,9 +331,9 @@ for i = 1:img_num
     [size_distribution3{i},r] = sizeDistribution(shadow1rotated_imgs(i).Image);
 end
 
-% Compute Pectrum
+% Compute Pecstrum
 for i = 1:img_num
-    Pec3{i} = Pectrum(cell2mat(size_distribution3(i)));
+    Pec3{i} = Pecstrum(cell2mat(size_distribution3(i)));
 end
 % Compute complexity
 complexity = zeros(1,img_num);
